@@ -9,13 +9,41 @@ GAME RULES:
 
 
 
-var scores, roundScore, activePlayer, dice;
+var scores, roundScore, activePlayer;
 
 score = [0, 0];
 roundScore = 0;
 activePlayer = 0;
 
-dice = Math.floor(Math.random() * 6) + 1;
 
-document.querySelector('#current-0').textContent = dice;
 document.querySelector('.dice').style.display = 'none';
+
+document.querySelector('.btn-roll').addEventListener('click', function(){
+
+	//Randmom number
+	var dice = dice = Math.floor(Math.random() * 6) + 1;
+
+	//Display the results
+	var diceDOM = document.querySelector('.dice');
+	diceDOM.style.display = 'block';
+	diceDOM.src = 'dice-' + dice + '.png';
+
+	//update the round score if the rolled number was NOT 1
+	if(dice !== 1 ){
+		roundScore += dice;
+		document.querySelector('#current-' + activePlayer).textContent = roundScore;
+	}else{
+		roundScore = 0;
+
+		activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+
+		document.querySelector('#current-0').textContent = '0';
+		document.querySelector('#current-1').textContent = '0';
+
+		diceDOM.style.display = 'none';
+	}
+});	
+
+
+
+//document.querySelector('#current-0').textContent = dice;
