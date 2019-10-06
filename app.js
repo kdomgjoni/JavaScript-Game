@@ -7,6 +7,14 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 */
 
+document.querySelector('.dice').style.display = 'none';
+
+
+document.querySelector('#score-0').textContent = '0';
+document.querySelector('#score-1').textContent = '0';
+document.querySelector('#current-0').textContent = '0';
+document.querySelector('#current-1').textContent = '0';
+
 
 
 var scores, roundScore, activePlayer;
@@ -15,8 +23,6 @@ score = [0, 0];
 roundScore = 0;
 activePlayer = 0;
 
-
-document.querySelector('.dice').style.display = 'none';
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
 
@@ -33,17 +39,44 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
 		roundScore += dice;
 		document.querySelector('#current-' + activePlayer).textContent = roundScore;
 	}else{
-		roundScore = 0;
-
-		activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
-
-		document.querySelector('#current-0').textContent = '0';
-		document.querySelector('#current-1').textContent = '0';
+		nextPlayer();
 
 		diceDOM.style.display = 'none';
 	}
 });	
 
+document.querySelector('.btn-hold').addEventListener('click', function(){
+	//Add current score to GLOBAL score
+	score[activePlayer] += roundScore;
 
+	//update the UI
+	document.querySelector('#score-' + activePlayer).textContent = score[activePlayer];
+
+	//check if player won the game
+	if(score[activePlayer] >= 20){
+		document.querySelector('#name-' + activePlayer).textContent = 'winner';
+		document.querySelector('.dice').style.display = 'none';
+		document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+		document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+	}else{
+		//next player
+		nextPlayer();
+	}
+
+})
+
+function nextPlayer(){
+
+	roundScore = 0;
+
+	activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+
+	document.querySelector('#current-0').textContent = '0';
+	document.querySelector('#current-1').textContent = '0';
+
+	document.querySelector(".player-0-panel").classList.toggle('active');
+	document.querySelector(".player-1-panel").classList.toggle('active');
+
+}
 
 //document.querySelector('#current-0').textContent = dice;
