@@ -7,63 +7,61 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 */
 
-document.querySelector('.dice').style.display = 'none';
-
-
-document.querySelector('#score-0').textContent = '0';
-document.querySelector('#score-1').textContent = '0';
-document.querySelector('#current-0').textContent = '0';
-document.querySelector('#current-1').textContent = '0';
 
 
 
-var scores, roundScore, activePlayer;
+var scores, roundScore, activePlayer, gamePlaying;
 
-score = [0, 0];
-roundScore = 0;
-activePlayer = 0;
-
+init();
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
 
-	//Randmom number
-	var dice = dice = Math.floor(Math.random() * 6) + 1;
+	if(gamePlaying){
+		//Randmom number
+		var dice = dice = Math.floor(Math.random() * 6) + 1;
 
-	//Display the results
-	var diceDOM = document.querySelector('.dice');
-	diceDOM.style.display = 'block';
-	diceDOM.src = 'dice-' + dice + '.png';
+		//Display the results
+		var diceDOM = document.querySelector('.dice');
+		diceDOM.style.display = 'block';
+		diceDOM.src = 'dice-' + dice + '.png';
 
-	//update the round score if the rolled number was NOT 1
-	if(dice !== 1 ){
-		roundScore += dice;
-		document.querySelector('#current-' + activePlayer).textContent = roundScore;
-	}else{
-		nextPlayer();
+		//update the round score if the rolled number was NOT 1
+		if(dice !== 1 ){
+			roundScore += dice;
+			document.querySelector('#current-' + activePlayer).textContent = roundScore;
+		}else{
+			nextPlayer();
 
-		diceDOM.style.display = 'none';
+			diceDOM.style.display = 'none';
+		}
 	}
 });	
 
 document.querySelector('.btn-hold').addEventListener('click', function(){
-	//Add current score to GLOBAL score
-	score[activePlayer] += roundScore;
+	
+	if(gamePlaying){
+		//Add current score to GLOBAL score
+		score[activePlayer] += roundScore;
 
-	//update the UI
-	document.querySelector('#score-' + activePlayer).textContent = score[activePlayer];
+		//update the UI
+		document.querySelector('#score-' + activePlayer).textContent = score[activePlayer];
 
-	//check if player won the game
-	if(score[activePlayer] >= 20){
-		document.querySelector('#name-' + activePlayer).textContent = 'winner';
-		document.querySelector('.dice').style.display = 'none';
-		document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
-		document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
-	}else{
-		//next player
-		nextPlayer();
+		//check if player won the game
+		if(score[activePlayer] >= 20){
+			document.querySelector('#name-' + activePlayer).textContent = 'winner';
+			document.querySelector('.dice').style.display = 'none';
+			document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+			document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+			gamePlaying = false;
+		}else{
+			//next player
+			nextPlayer();
+		}
 	}
 
-})
+});
+
+document.querySelector('.btn-new').addEventListener('click', init);
 
 function nextPlayer(){
 
@@ -76,6 +74,29 @@ function nextPlayer(){
 
 	document.querySelector(".player-0-panel").classList.toggle('active');
 	document.querySelector(".player-1-panel").classList.toggle('active');
+
+}
+
+function init(){
+	score = [0, 0];
+	roundScore = 0;
+	activePlayer = 0;
+	gamePlaying = true;
+
+	document.querySelector('.dice').style.display = 'none';
+
+	document.querySelector('#score-0').textContent = '0';
+	document.querySelector('#score-1').textContent = '0';
+	document.querySelector('#current-0').textContent = '0';
+	document.querySelector('#current-1').textContent = '0';
+	document.querySelector('#name-0').textContent = 'player 1';
+	document.querySelector('#name-1').textContent = 'player 2';
+
+	document.querySelector('.player-0-panel').classList.remove('winner');
+	document.querySelector('.player-1-panel').classList.remove('winner');
+	document.querySelector('.player-0-panel').classList.remove('active');
+	document.querySelector('.player-1-panel').classList.remove('active');
+	document.querySelector('.player-0-panel').classList.add('active');
 
 }
 
