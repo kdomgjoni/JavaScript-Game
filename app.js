@@ -13,12 +13,20 @@ Challenge 1:
  the other player turn. 
 */
 
+/*
+Challenge 2:
+ - Add an input field to the html where players can set the winning score, so that they can change
+ the predefined score of 20. 
+*/
+
 
 var scores, roundScore, activePlayer, gamePlaying;
+
 
 init();
 
 var lastDice;
+
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
 
@@ -62,8 +70,19 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
 		//update the UI
 		document.querySelector('#score-' + activePlayer).textContent = score[activePlayer];
 
+		var input_value = document.querySelector(".btn-input").value;
+		var finalScore; 
+
+		if(input_value){
+			finalScore = input_value;
+		}else{
+			finalScore = 20;
+		}
+		console.log(finalScore);
+
+
 		//check if player won the game
-		if(score[activePlayer] >= 20){
+		if(score[activePlayer] >= finalScore){
 			document.querySelector('#name-' + activePlayer).textContent = 'winner';
 			document.querySelector('.dice').style.display = 'none';
 			document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
