@@ -7,12 +7,18 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 */
 
-
+/*
+Challenge 1:
+ - The player lose his entire score if he hit two 6 in a row. After that it is 
+ the other player turn. 
+*/
 
 
 var scores, roundScore, activePlayer, gamePlaying;
 
 init();
+
+var lastDice;
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
 
@@ -20,13 +26,21 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
 		//Randmom number
 		var dice = dice = Math.floor(Math.random() * 6) + 1;
 
+
 		//Display the results
 		var diceDOM = document.querySelector('.dice');
 		diceDOM.style.display = 'block';
 		diceDOM.src = 'dice-' + dice + '.png';
 
+		//lose score if the player hits two 6 in a row
+		if(dice === 6 && lastDice === 6){
+			score[activePlayer] = 0;
+			document.querySelector('#score-' + activePlayer).textContent = 0;
+			diceDOM.style.display = 'none';
+			nextPlayer();
+		}
 		//update the round score if the rolled number was NOT 1
-		if(dice !== 1 ){
+		else if(dice !== 1){
 			roundScore += dice;
 			document.querySelector('#current-' + activePlayer).textContent = roundScore;
 		}else{
@@ -34,6 +48,8 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
 
 			diceDOM.style.display = 'none';
 		}
+
+		lastDice = dice;
 	}
 });	
 
@@ -56,6 +72,7 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
 		}else{
 			//next player
 			nextPlayer();
+
 		}
 	}
 
